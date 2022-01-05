@@ -29,21 +29,18 @@ function SD
            
     switch ($p) 
     {
-        "-" 
+        {"-" -or ".."}
         {
             # directorio anterior 
-            if ($p -eq "-") 
+            $aux = 1
+            $ubicacion = (Get-Location).Path
+            # si 
+            $global:l | %{ if ($_ -eq $ubicacion) { $aux = "0"; break }}
+            
+            if ($aux)  
             {
-                $aux = 1
-                $ubicacion = (Get-Location).Path
-                # si 
-                $global:l | %{ if ($_ -eq $ubicacion) { $aux = "0"; break }}
-                
-                if ($aux)  
-                {
-                    $global:d.Add($ubicacion)     
-                    Set-Location -Path .. #-PassThru
-                }
+                $global:d.Add($ubicacion)     
+                Set-Location -Path .. #-PassThru
             }
         }
 
@@ -60,7 +57,7 @@ function SD
         
         Default 
         {
-            write-host 'use: ( SD - ) or ( SD + ) '
+            Set-Location -Path $p #-PassThru 
         }
     }
 }
